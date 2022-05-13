@@ -2,20 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS dotnet
 
 # Copy Projects
-COPY source/Application/Architecture.Application.csproj ./source/Application/
-COPY source/Database/Architecture.Database.csproj ./source/Database/
-COPY source/Domain/Architecture.Domain.csproj ./source/Domain/
-COPY source/Model/Architecture.Model.csproj ./source/Model/
-COPY source/Web/Architecture.Web.csproj ./source/Web/
+COPY source/Web/Web.csproj ./source/Web/
 
 # .NET Restore
-RUN dotnet restore ./source/Web/Architecture.Web.csproj
+RUN dotnet restore ./source/Web/Web.csproj
 
 # Copy All Files
 COPY source ./source/
 
 # .NET Publish
-RUN dotnet publish ./source/Web/Architecture.Web.csproj -c Release -o /dist --no-restore
+RUN dotnet publish ./source/Web/Web.csproj -c Release -o /dist --no-restore
 
 # Angular
 FROM node:16-alpine AS angular
@@ -32,4 +28,4 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 WORKDIR /app
 COPY --from=dotnet /dist .
 COPY --from=angular /source/Web/Frontend/dist ./Frontend
-ENTRYPOINT ["dotnet", "Architecture.Web.dll"]
+ENTRYPOINT ["dotnet", "Web.dll"]

@@ -4,6 +4,7 @@
 **/*.yml
 **/*.user
 **/*.metaproj
+**/*.pdb
 **/.dockerignore
 **/.editorconfig
 **/.git
@@ -19,5 +20,4 @@
 **/node_modules
 **/obj
 **/package-lock.json
-**/*.pdb
 **/[Ll]ogs
