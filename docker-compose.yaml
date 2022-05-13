@@ -1,8 +1,8 @@
 version: "3.7"
 services:
     web:
-        image: adventure_web
-        container_name: adventure_web
+        image: adventure
+        container_name: adventure
         restart: always
         build:
             context: .

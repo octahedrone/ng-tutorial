@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS dotnet
 
 # Copy Projects
 COPY source/Web/Web.csproj ./source/Web/
+COPY source/Db/Db.csproj ./source/Db/
 
 # .NET Restore
 RUN dotnet restore ./source/Web/Web.csproj
