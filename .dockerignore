@@ -2,6 +2,8 @@
 **/*.log
 **/*.md
 **/*.yml
+**/*.user
+**/*.metaproj
 **/.dockerignore
 **/.editorconfig
 **/.git
@@ -10,6 +12,7 @@
 **/.vs
 **/.idea
 **/.vscode
+**/.angular
 **/bin
 **/dist
 **/dockerfile
