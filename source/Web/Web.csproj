@@ -7,9 +7,17 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="DotNetCore.AspNetCore" Version="16.32.0" />
+        <PackageReference Include="DotNetCore.EntityFrameworkCore" Version="16.35.0" />
         <PackageReference Include="DotNetCore.IoC" Version="16.32.0" />
         <PackageReference Include="DotNetCore.Logging" Version="16.32.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Db\Db.csproj" />
     </ItemGroup>
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->

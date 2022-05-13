@@ -1,7 +1,11 @@
+using Db;
 using DotNetCore.AspNetCore;
+using DotNetCore.IoC;
 using DotNetCore.Logging;
+using DotNetCore.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -11,6 +15,7 @@ builder.Services.AddControllers().AddJsonOptions();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSpaStaticFiles("Frontend");
+builder.Services.AddContext<AdventureContext>(options => options.UseSqlServer(builder.Services.GetConnectionString(nameof(AdventureContext))));
 
 var application = builder.Build();
 
