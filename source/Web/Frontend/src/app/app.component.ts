@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {DiagnosticsService} from "./services/diagnostics.service";
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'adventure';
+
+  constructor(private service: DiagnosticsService) {
+  }
+
+  async callTestApi() {
+    const date = await this.service.datetime();
+    date.subscribe(x => console.log(x));
+  }
 }
