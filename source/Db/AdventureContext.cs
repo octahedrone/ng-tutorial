@@ -8,5 +8,41 @@ public class AdventureContext : DbContext
     {
     }
 
-    public DbSet<Scenario> Scenarios { get; set; }
+    public DbSet<AdventureScript> AdventureScripts { get; set; }
+    public DbSet<AdventureScriptStep> AdventureScriptSteps { get; set; }
+    public DbSet<Adventure> Adventures { get; set; }
+    public DbSet<AdventureLog> AdventureLogs { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<AdventureScriptStep>()
+            .HasOne<AdventureScript>()
+            .WithMany()
+            .HasForeignKey(x => x.AdventureScriptId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<AdventureScriptStep>()
+            .HasOne<AdventureScriptStep>()
+            .WithMany()
+            .HasForeignKey(x => x.ParentStepId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        modelBuilder.Entity<Adventure>()
+            .HasOne<AdventureScript>()
+            .WithMany()
+            .HasForeignKey(x => x.AdventureScriptId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AdventureLog>()
+            .HasOne<Adventure>()
+            .WithMany()
+            .HasForeignKey(x => x.AdventureId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AdventureLog>()
+            .HasOne<AdventureScriptStep>()
+            .WithMany()
+            .HasForeignKey(x => x.AdventureScriptStepId)
+            .OnDelete(DeleteBehavior.NoAction);
+    }
 }
