@@ -16,3 +16,4 @@ export class HomePageComponent implements OnInit {
     this.service.load().subscribe(x => this.state = x);
   }
 }
+

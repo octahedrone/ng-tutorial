@@ -1,1 +1,8 @@
-Home screen
+<div *ngIf="!!state">
+  <div *ngIf="!state.scenarioIsPresent" routerLink="create">Let's create a script for an adventure!</div>
+  <div *ngIf="state.scenarioIsPresent" routerLink="edit">You can edit current adventure script</div>
+  <div *ngIf="state.scenarioIsPresent && !state.activeAdventureIsPresent" routerLink="start">Let's start a new adventure!</div>
+  <div *ngIf="state.activeAdventureIsPresent" routerLink="play">Continue your adventure...</div>
+  <div *ngIf="state.activeAdventureIsPresent && state.adventureLogIsPresent" routerLink="log">Look at your current adventure progress so far...</div>
+  <div *ngIf="!state.activeAdventureIsPresent && state.adventureLogIsPresent" routerLink="log">Reember your last adventure!</div>
+</div>
