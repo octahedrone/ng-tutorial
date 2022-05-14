@@ -7,6 +7,7 @@ import {DiagnosticsService} from "./services/diagnostics.service";
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {ROUTES} from "./app.routes";
+import {HomePageService} from "./services/homePage.service";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {ROUTES} from "./app.routes";
     RouterModule.forRoot(ROUTES),
   ],
   providers: [
-    DiagnosticsService
+    DiagnosticsService,
+    HomePageService
   ],
   bootstrap: [AppComponent]
 })

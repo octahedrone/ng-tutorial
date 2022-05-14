@@ -1,18 +1,18 @@
-import {Component} from '@angular/core';
-import {DiagnosticsService} from "../../services/diagnostics.service";
+import {Component, OnInit} from '@angular/core';
+import {HomePageService, HomeScreenData} from "../../services/homePage.service";
 
 @Component({
   selector: 'home-page',
   templateUrl: './homePage.component.html'
 })
-export class HomePageComponent {
-  title = 'adventure';
+export class HomePageComponent implements OnInit {
+  public state: HomeScreenData | null;
 
-  constructor(private service: DiagnosticsService) {
+  constructor(private service: HomePageService) {
+    this.state = null;
   }
 
-  async callTestApi() {
-    const date = await this.service.datetime();
-    date.subscribe(x => console.log(x));
+  ngOnInit() {
+    this.service.load().subscribe(x => this.state = x);
   }
 }
