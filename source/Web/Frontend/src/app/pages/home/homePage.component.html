@@ -1,4 +1,4 @@
-<div *ngIf="!!state">
+<div *ngIf="state$ | async as state">
   <div *ngIf="!state.scenarioIsPresent" routerLink="create">Let's create a script for an adventure!</div>
   <div *ngIf="state.scenarioIsPresent" routerLink="edit">You can edit current adventure script</div>
   <div *ngIf="state.scenarioIsPresent && !state.activeAdventureIsPresent" routerLink="start">Let's start a new adventure!</div>

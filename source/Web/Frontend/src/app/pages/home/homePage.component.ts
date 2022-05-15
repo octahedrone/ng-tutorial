@@ -1,19 +1,23 @@
 import {Component, OnInit} from '@angular/core';
-import {HomePageService, HomeScreenData} from "../../services/homePage.service";
+import {Store} from "@ngrx/store";
+import * as homePageActions from "./state/homePage.actions";
+import {getHomePageState, HomePageState} from "./state/homePage.reducer";
+import {Observable} from "rxjs";
+import {State} from "../../state/app.state";
 
 @Component({
   selector: 'home-page',
   templateUrl: './homePage.component.html'
 })
 export class HomePageComponent implements OnInit {
-  public state: HomeScreenData | null;
+  public state$: Observable<HomePageState>;
 
-  constructor(private service: HomePageService) {
-    this.state = null;
+  constructor(private store: Store<State>) {
+    this.state$ = this.store.select(getHomePageState);
   }
 
   ngOnInit() {
-    this.service.load().subscribe(x => this.state = x);
+    this.store.dispatch(homePageActions.initializeAction());
   }
 }
 

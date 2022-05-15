@@ -9,6 +9,10 @@ import {RouterModule} from "@angular/router";
 import {ROUTES} from "./app.routes";
 import {HomePageService} from "./services/homePage.service";
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import {State} from "./state/app.state";
+import {homePageReducer} from "./pages/home/state/homePage.reducer";
+import {HomePageEffects} from "./pages/home/state/homePage.effects";
 
 @NgModule({
   declarations: [
@@ -19,7 +23,12 @@ import { StoreModule } from '@ngrx/store';
     HttpClientModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(ROUTES),
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot<State>({
+      home: homePageReducer
+    }),
+    EffectsModule.forRoot([
+      HomePageEffects
+    ]),
   ],
   providers: [
     DiagnosticsService,

@@ -1,5 +1,6 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class HomePageService {
@@ -7,7 +8,7 @@ export class HomePageService {
     private readonly http: HttpClient) {
   }
 
-  load = () => this.http.get<HomeScreenData>("home");
+  loadState = (): Observable<HomeScreenData> => this.http.get<HomeScreenData>("home");
 }
 
 export interface HomeScreenData {
