@@ -5,4 +5,6 @@ import {Component} from '@angular/core';
   templateUrl: './adventureScriptEditorPage.component.html'
 })
 export class AdventureScriptEditorPageComponent {
+  editorOptions = {theme: 'vs-dark', language: 'yaml'};
+  code: string = '';
 }
