@@ -8,6 +8,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {ROUTES} from "./app.routes";
 import {HomePageService} from "./services/homePage.service";
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {HomePageService} from "./services/homePage.service";
     HttpClientModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(ROUTES),
+    StoreModule.forRoot({}, {}),
   ],
   providers: [
     DiagnosticsService,
