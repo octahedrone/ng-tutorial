@@ -51,6 +51,7 @@ namespace Db.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AdventureScriptId = table.Column<int>(type: "int", nullable: false),
                     ParentStepId = table.Column<int>(type: "int", nullable: true),
+                    OptionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

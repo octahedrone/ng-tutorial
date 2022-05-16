@@ -96,6 +96,10 @@ namespace Db.Migrations
                     b.Property<int>("AdventureScriptId")
                         .HasColumnType("int");
 
+                    b.Property<string>("OptionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("ParentStepId")
                         .HasColumnType("int");
 

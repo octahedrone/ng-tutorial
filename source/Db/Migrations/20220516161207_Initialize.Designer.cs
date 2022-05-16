@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Db.Migrations
 {
     [DbContext(typeof(AdventureContext))]
-    [Migration("20220514202736_Initialize")]
+    [Migration("20220516161207_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,10 @@ namespace Db.Migrations
 
                     b.Property<int>("AdventureScriptId")
                         .HasColumnType("int");
+
+                    b.Property<string>("OptionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentStepId")
                         .HasColumnType("int");
