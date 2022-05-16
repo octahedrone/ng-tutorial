@@ -1,3 +1,4 @@
+using Application.ScriptEditor;
 using Db;
 using DotNetCore.AspNetCore;
 using DotNetCore.IoC;
@@ -16,6 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSpaStaticFiles("Frontend");
 builder.Services.AddContext<AdventureContext>(options => options.UseSqlServer(builder.Services.GetConnectionString(nameof(AdventureContext))));
+
+// Application services
+builder.Services.AddScoped<IScriptEditorService, ScriptEditorService>();
+//
 
 var application = builder.Build();
 

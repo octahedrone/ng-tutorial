@@ -1,3 +1,4 @@
+using Application.ScriptEditor;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -6,12 +7,21 @@ namespace Web.Controllers;
 [Route("home")]
 public sealed class HomePageController : ControllerBase
 {
+    private IScriptEditorService _scriptEditorService;
+
+    public HomePageController(IScriptEditorService scriptEditorService)
+    {
+        _scriptEditorService = scriptEditorService;
+    }
+
     [HttpGet("")]
     public HomeScreenData GetInitialData()
     {
+        var hasCurrentScript = _scriptEditorService.HasCurrentScript();
+        
         return new HomeScreenData
         (
-            scenarioIsPresent: false,
+            scenarioIsPresent: hasCurrentScript,
             activeAdventureIsPresent: false,
             adventureLogIsPresent: false
         );
