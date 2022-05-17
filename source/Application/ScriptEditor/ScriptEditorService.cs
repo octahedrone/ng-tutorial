@@ -1,4 +1,5 @@
 ﻿using Db;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.ScriptEditor;
 
@@ -18,14 +19,15 @@ public class ScriptEditorService : IScriptEditorService
 
     public ScriptEditorScript GetCurrentScript()
     {
-        var scriptRecord = _dataContext.AdventureScripts.FirstOrDefault();
+        var scriptRecord = _dataContext.AdventureScripts
+            .Include(x => x.AdventureScriptSteps)
+            .FirstOrDefault();
         if (scriptRecord == null)
         {
             return null;
         }
 
-        var scriptStepsRecords = _dataContext.AdventureScriptSteps
-            .Where(x => x.AdventureScriptId == scriptRecord.Id)
+        var scriptStepsRecords = scriptRecord.AdventureScriptSteps
             .Select(x => new
             {
                 x.Id,
