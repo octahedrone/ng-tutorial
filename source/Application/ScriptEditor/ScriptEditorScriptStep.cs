@@ -4,5 +4,6 @@ public class ScriptEditorScriptStep
 {
     public string OptionText { get; set; }
     public string Text { get; set; }
-    public List<ScriptEditorScriptStep> OptionsInOrder { get; set; }
+    public int OrderNumber { get; set; }
+    public List<ScriptEditorScriptStep> Options { get; set; }
 }
