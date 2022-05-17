@@ -16,16 +16,17 @@ public class AdventureContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdventureScriptStep>()
-            .HasOne<AdventureScript>()
-            .WithMany()
+            .HasOne(x => x.AdventureScript)
+            .WithMany(x => x.AdventureScriptSteps)
             .HasForeignKey(x => x.AdventureScriptId)
             .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<AdventureScriptStep>()
-            .HasOne<AdventureScriptStep>()
-            .WithMany()
+            .HasOne(x => x.ParentStep)
+            .WithMany(x => x.Options)
             .HasForeignKey(x => x.ParentStepId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired(false);
         
         modelBuilder.Entity<Adventure>()
             .HasOne<AdventureScript>()

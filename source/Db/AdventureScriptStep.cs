@@ -8,4 +8,7 @@ public class AdventureScriptStep
     public int OrderNumber { get; set; }
     public string OptionText { get; set; }
     public string Text { get; set; }
+    public virtual AdventureScript AdventureScript { get; set; }
+    public virtual AdventureScriptStep ParentStep { get; set; }
+    public virtual ICollection<AdventureScriptStep> Options { get; set; }
 }
