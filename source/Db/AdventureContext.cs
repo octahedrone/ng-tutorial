@@ -16,6 +16,10 @@ public class AdventureContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdventureScriptStep>()
+            .Property(x => x.OptionText)
+            .IsRequired(false);
+        
+        modelBuilder.Entity<AdventureScriptStep>()
             .HasOne(x => x.AdventureScript)
             .WithMany(x => x.AdventureScriptSteps)
             .HasForeignKey(x => x.AdventureScriptId)
