@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using YamlFormatter;
 
 namespace Playground;
 
@@ -29,7 +28,7 @@ options:
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
 
-        var script = deserializer.Deserialize<AdventureScriptStep>(sourceString);
+        var script = deserializer.Deserialize<YamlAdventureScriptStep>(sourceString);
 
         script.Text.Should().Be("Do I want a Doughnut?");
         script.Options.Count.Should().Be(2);
@@ -43,97 +42,4 @@ options:
         script.Options["Yes"].Options["No"].Text.Should().Be("Is it a good one?");
         script.Options["Yes"].Options["Yes"].Text.Should().Be("Are you sure?");
     }
-}
-
-public class AdventureScriptStep
-{
-    public string Text { get; set; }
-    public int OrderNumber { get; set; }
-    public AdventureScriptStepsDictionary Options { get; set; }
-}
-
-public class AdventureScriptStepsDictionary : IDictionary<string, AdventureScriptStep>
-{
-    private readonly IDictionary<string, AdventureScriptStep> _innerDictionary = new Dictionary<string, AdventureScriptStep>();
-
-    public IEnumerator<KeyValuePair<string, AdventureScriptStep>> GetEnumerator()
-    {
-        return _innerDictionary.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return ((IEnumerable)_innerDictionary).GetEnumerator();
-    }
-
-    public void Add(KeyValuePair<string, AdventureScriptStep> item)
-    {
-        item.Value.OrderNumber = Count;
-        _innerDictionary.Add(item);
-    }
-
-    public void Clear()
-    {
-        _innerDictionary.Clear();
-    }
-
-    public bool Contains(KeyValuePair<string, AdventureScriptStep> item)
-    {
-        return _innerDictionary.Contains(item);
-    }
-
-    public void CopyTo(KeyValuePair<string, AdventureScriptStep>[] array, int arrayIndex)
-    {
-        _innerDictionary.CopyTo(array, arrayIndex);
-    }
-
-    public bool Remove(KeyValuePair<string, AdventureScriptStep> item)
-    {
-        return _innerDictionary.Remove(item);
-    }
-
-    public int Count
-    {
-        get => _innerDictionary.Count;
-    }
-
-    public bool IsReadOnly
-    {
-        get => _innerDictionary.IsReadOnly;
-    }
-
-    public void Add(string key, AdventureScriptStep value)
-    {
-        value.OrderNumber = Count;
-        _innerDictionary.Add(key, value);
-    }
-
-    public bool ContainsKey(string key)
-    {
-        return _innerDictionary.ContainsKey(key);
-    }
-
-    public bool Remove(string key)
-    {
-        return _innerDictionary.Remove(key);
-    }
-
-    public bool TryGetValue(string key, out AdventureScriptStep value)
-    {
-        return _innerDictionary.TryGetValue(key, out value);
-    }
-
-    public AdventureScriptStep this[string key]
-    {
-        get => _innerDictionary[key];
-        set
-        {
-            value.OrderNumber = Count;
-            _innerDictionary[key] = value;
-        }
-    }
-
-    public ICollection<string> Keys => _innerDictionary.Keys;
-
-    public ICollection<AdventureScriptStep> Values => _innerDictionary.Values;
 }
