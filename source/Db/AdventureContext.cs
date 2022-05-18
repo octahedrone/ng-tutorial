@@ -39,8 +39,8 @@ public class AdventureContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<AdventureLog>()
-            .HasOne<Adventure>()
-            .WithMany()
+            .HasOne(x => x.Adventure)
+            .WithMany(x => x.Logs)
             .HasForeignKey(x => x.AdventureId)
             .OnDelete(DeleteBehavior.Cascade);
 
