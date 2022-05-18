@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Application.Playground;
 using Application.ScriptEditor;
 using Db;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using NSubstitute;
 using Xunit;
 
 namespace Application.Integration.Tests;
@@ -12,6 +15,7 @@ namespace Application.Integration.Tests;
 public class ScriptEditorService_Tests : IDisposable
 {
     private readonly AdventureContext _dataContext;
+    private readonly IAdventurePlaygroundService _playgroundServiceMock;
     private readonly IScriptEditorService _sut;
 
     public ScriptEditorService_Tests()
@@ -21,8 +25,9 @@ public class ScriptEditorService_Tests : IDisposable
             .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
+        _playgroundServiceMock = Substitute.For<IAdventurePlaygroundService>();
         _dataContext = new AdventureContext(contextOptions);
-        _sut = new ScriptEditorService(_dataContext);
+        _sut = new ScriptEditorService(_dataContext, _playgroundServiceMock);
 
         _dataContext.Database.EnsureDeleted();
         _dataContext.Database.EnsureCreated();
@@ -113,5 +118,30 @@ public class ScriptEditorService_Tests : IDisposable
                 && x.Text == option2.Text
                 && x.OrderNumber == option2.OrderNumber
             );
+    }
+
+    [Fact]
+    public void TestDeleteCurrentScriptWithAdventure()
+    {
+        _dataContext.AdventureScripts.Add(new AdventureScript
+        {
+            Created = DateTime.UtcNow,
+            AdventureScriptSteps = new List<AdventureScriptStep>
+            {
+                new()
+                {
+                    Text = "Root step"
+                }
+            }
+        });
+        _dataContext.SaveChanges();
+        
+        _sut.DeleteCurrentScript();
+        
+        _dataContext.AdventureScriptSteps.Any().Should().BeFalse();
+        _dataContext.AdventureScripts.Any().Should().BeFalse();
+        _playgroundServiceMock
+            .Received(1)
+            .DeleteCurrentAdventure();
     }
 }

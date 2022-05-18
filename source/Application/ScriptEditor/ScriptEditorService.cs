@@ -1,4 +1,5 @@
-﻿using Db;
+﻿using Application.Playground;
+using Db;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.ScriptEditor;
@@ -6,10 +7,12 @@ namespace Application.ScriptEditor;
 public class ScriptEditorService : IScriptEditorService
 {
     private readonly AdventureContext _dataContext;
+    private readonly IAdventurePlaygroundService _adventureService;
 
-    public ScriptEditorService(AdventureContext dataContext)
+    public ScriptEditorService(AdventureContext dataContext, IAdventurePlaygroundService adventureService)
     {
         _dataContext = dataContext;
+        _adventureService = adventureService;
     }
 
     public bool HasCurrentScript()
@@ -21,11 +24,9 @@ public class ScriptEditorService : IScriptEditorService
     {
         var scriptRecord = _dataContext.AdventureScripts
             .Include(x => x.AdventureScriptSteps)
-            .FirstOrDefault();
+            .SingleOrDefault();
         if (scriptRecord == null)
-        {
             return null;
-        }
 
         var scriptStepsRecords = scriptRecord.AdventureScriptSteps
             .Select(x => new
@@ -61,6 +62,25 @@ public class ScriptEditorService : IScriptEditorService
 
     public void ReplaceCurrentScript(ScriptEditorScript script)
     {
-        throw new NotImplementedException();
+        using var transaction = _dataContext.Database.BeginTransaction();
+
+        DeleteCurrentScript();
+
+        transaction.Commit();
+    }
+
+    public void DeleteCurrentScript()
+    {
+        var scriptRecord = _dataContext.AdventureScripts
+            .Include(x => x.AdventureScriptSteps)
+            .SingleOrDefault();
+        
+        if (scriptRecord == null)
+            return;
+        
+        _adventureService.DeleteCurrentAdventure();
+
+        _dataContext.AdventureScripts.Remove(scriptRecord);
+        _dataContext.SaveChanges();
     }
 }
