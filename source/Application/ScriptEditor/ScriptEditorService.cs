@@ -22,49 +22,23 @@ public class ScriptEditorService : IScriptEditorService
 
     public ScriptEditorScript GetCurrentScript()
     {
-        var scriptRecord = _dataContext.AdventureScripts
+        var scriptEntity = _dataContext.AdventureScripts
             .Include(x => x.AdventureScriptSteps)
             .SingleOrDefault();
-        if (scriptRecord == null)
-            return null;
-
-        var scriptStepsRecords = scriptRecord.AdventureScriptSteps
-            .Select(x => new
-            {
-                x.Id,
-                x.ParentStepId,
-                Record = new ScriptEditorScriptStep
-                {
-                    Text = x.Text,
-                    OptionText = x.OptionText,
-                    OrderNumber = x.OrderNumber
-                }
-            })
-            .ToDictionary(x => x.Id);
-
-        var recordsWithParent = scriptStepsRecords.Values.Where(x => x.ParentStepId != null);
-        foreach (var child in recordsWithParent)
-        {
-            var parent = scriptStepsRecords[child.ParentStepId.Value];
-            if (parent.Record.Options == null)
-            {
-                parent.Record.Options = new List<ScriptEditorScriptStep>();
-            }
-            parent.Record.Options.Add(child.Record);
-        }
-
-        return new ScriptEditorScript
-        {
-            Created = scriptRecord.Created,
-            Root = scriptStepsRecords.Values.Single(x => x.ParentStepId == null).Record
-        };
+        
+        return scriptEntity.ToEditorScript();
     }
 
     public void ReplaceCurrentScript(ScriptEditorScript script)
     {
+        var scriptEntity = script.ToScriptEntity();
+        
         using var transaction = _dataContext.Database.BeginTransaction();
 
         DeleteCurrentScript();
+
+        _dataContext.AdventureScripts.Add(scriptEntity);
+        _dataContext.SaveChanges();
 
         transaction.Commit();
     }
@@ -74,10 +48,10 @@ public class ScriptEditorService : IScriptEditorService
         var scriptRecord = _dataContext.AdventureScripts
             .Include(x => x.AdventureScriptSteps)
             .SingleOrDefault();
-        
+
         if (scriptRecord == null)
             return;
-        
+
         _adventureService.DeleteCurrentAdventure();
 
         _dataContext.AdventureScripts.Remove(scriptRecord);

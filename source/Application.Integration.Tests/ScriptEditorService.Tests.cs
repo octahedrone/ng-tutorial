@@ -135,13 +135,100 @@ public class ScriptEditorService_Tests : IDisposable
             }
         });
         _dataContext.SaveChanges();
-        
+
         _sut.DeleteCurrentScript();
-        
+
         _dataContext.AdventureScriptSteps.Any().Should().BeFalse();
         _dataContext.AdventureScripts.Any().Should().BeFalse();
         _playgroundServiceMock
             .Received(1)
             .DeleteCurrentAdventure();
+    }
+
+    [Fact]
+    public void ReplaceCurrentScriptWorksFineWithNoExistingScript()
+    {
+        var option1 = new ScriptEditorScriptStep()
+        {
+            OptionText = "Option 1",
+            Text = "Option 1 text",
+        };
+        var option21 = new ScriptEditorScriptStep()
+        {
+            OptionText = "Option 2 1",
+            Text = "Option 2 1 text"
+        };
+        var option2 = new ScriptEditorScriptStep()
+        {
+            OptionText = "Option 2",
+            Text = "Option 2 text",
+            Options = new List<ScriptEditorScriptStep>
+            {
+                option21
+            }
+        };
+        var rootStep = new ScriptEditorScriptStep
+        {
+            Text = "Root step",
+            Options = new List<ScriptEditorScriptStep>
+            {
+                option1,
+                option2,
+            }
+        };
+        var editorScript = new ScriptEditorScript
+        {
+            Created = DateTime.UtcNow,
+            Root = rootStep
+        };
+
+        _dataContext.AdventureScriptSteps.Any().Should().BeFalse();
+        _dataContext.AdventureScripts.Any().Should().BeFalse();
+        
+        _sut.ReplaceCurrentScript(editorScript);
+
+        var scriptEntity = _dataContext.AdventureScripts
+            .Single();
+
+        var scriptSteps = _dataContext.AdventureScriptSteps
+            .Where(x => x.AdventureScriptId == scriptEntity.Id)
+            .Include(x => x.AdventureScript)
+            .Include(x => x.ParentStep)
+            .ToList();
+        
+        scriptSteps.Count.Should().Be(4);
+
+        // only one root step
+        scriptSteps.Count(x => x.ParentStepId == null).Should().Be(1);
+        
+        // root step
+        scriptSteps.Should()
+            .Contain(x =>
+                x.ParentStepId == null
+                && x.Text == rootStep.Text
+                && x.OptionText == rootStep.OptionText);
+
+        var stepsWithParents = scriptSteps.Where(x => x.ParentStep != null);
+        
+        // option1
+        stepsWithParents.Should()
+            .Contain(x =>
+                x.ParentStep.Text == rootStep.Text
+                && x.Text == option1.Text
+                && x.OptionText == option1.OptionText);
+        
+        // option2
+        stepsWithParents.Should()
+            .Contain(x =>
+                x.ParentStep.Text == rootStep.Text
+                && x.Text == option2.Text
+                && x.OptionText == option2.OptionText);
+        
+        // option21
+        stepsWithParents.Should()
+            .Contain(x =>
+                x.ParentStep.Text == option2.Text
+                && x.Text == option21.Text
+                && x.OptionText == option21.OptionText);
     }
 }
