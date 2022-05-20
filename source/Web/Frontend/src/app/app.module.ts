@@ -20,7 +20,6 @@ import {HomePageModule} from "./pages/home/homePage.module";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {GlobalErrorHandler} from "./services/infrastructure/globalErrorHandler";
-import {LoggerService} from "./services/loggerService";
 import {NotificationService} from "./services/infrastructure/notificationService";
 
 @NgModule({
