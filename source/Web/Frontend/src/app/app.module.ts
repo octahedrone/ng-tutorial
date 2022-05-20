@@ -18,6 +18,7 @@ import {FormsModule} from "@angular/forms";
 import {AdventureScriptEditorPageModule} from "./pages/script-editor/adventureScriptEditorPage.module";
 import {AdventureScriptEditorService} from "./services/script-editor.service";
 import {HomePageModule} from "./pages/home/homePage.module";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {HomePageModule} from "./pages/home/homePage.module";
     EffectsModule.forRoot([
       HomePageEffects
     ]),
+    MatProgressBarModule,
   ],
   providers: [
     DiagnosticsService,
