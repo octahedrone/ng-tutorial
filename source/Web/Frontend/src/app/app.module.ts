@@ -16,6 +16,8 @@ import {HomePageEffects} from "./pages/home/state/homePage.effects";
 import {MonacoEditorModule} from "@materia-ui/ngx-monaco-editor";
 import {FormsModule} from "@angular/forms";
 import {AdventureScriptEditorPageModule} from "./pages/script-editor/adventureScriptEditorPage.module";
+import {AdventureScriptEditorService} from "./services/script-editor.service";
+import {HomePageModule} from "./pages/home/homePage.module";
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import {AdventureScriptEditorPageModule} from "./pages/script-editor/adventureSc
     BrowserAnimationsModule,
     FormsModule,
     MonacoEditorModule,
+    HomePageModule,
     AdventureScriptEditorPageModule,
     RouterModule.forRoot(ROUTES),
     StoreModule.forRoot<State>({
@@ -38,7 +41,8 @@ import {AdventureScriptEditorPageModule} from "./pages/script-editor/adventureSc
   ],
   providers: [
     DiagnosticsService,
-    HomePageService
+    HomePageService,
+    AdventureScriptEditorService
   ],
   bootstrap: [AppComponent]
 })

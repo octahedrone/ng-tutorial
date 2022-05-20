@@ -5,13 +5,7 @@ import {AdventureScriptEditorPageComponent} from "./pages/script-editor/adventur
 import {AdventurePlaygroundPageComponent} from "./pages/playground/adventurePlaygroundPage.component";
 
 export const ROUTES: Routes = [
-  {
-    path: "",
-    component: HomePageComponent,
-    children: [
-      {path: "", loadChildren: () => import("./pages/home/homePage.module").then((module) => module.HomePageModule)}
-    ]
-  },
+  {path: "", component: HomePageComponent},
   {path: "create", component: AdventureScriptEditorPageComponent},
   {path: "edit", component: AdventureScriptEditorPageComponent},
   {path: "start", component: AdventurePlaygroundPageComponent},
