@@ -20,7 +20,7 @@ public class ScriptEditorService : IScriptEditorService
         return _dataContext.AdventureScripts.Any();
     }
 
-    public ScriptEditorScript GetCurrentScript()
+    public ScriptEditorScript? GetCurrentScript()
     {
         var scriptEntity = _dataContext.AdventureScripts
             .Include(x => x.AdventureScriptSteps)

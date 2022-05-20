@@ -16,6 +16,12 @@ export class AdventureScriptEditorPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.store.dispatch(homePageActions.initializeAction());
+    this.service.loadScript()
+      .subscribe(x => this.code = x);
+  }
+
+  saveCurrentScript() {
+    this.service.saveScript(this.code)
+      .subscribe();
   }
 }
