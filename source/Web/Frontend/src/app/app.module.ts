@@ -1,6 +1,5 @@
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DiagnosticsService} from "./services/diagnostics.service";
@@ -19,6 +18,9 @@ import {AdventureScriptEditorPageModule} from "./pages/script-editor/adventureSc
 import {AdventureScriptEditorService} from "./services/script-editor.service";
 import {HomePageModule} from "./pages/home/homePage.module";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {GlobalErrorHandler} from "./services/infrastructure/globalErrorHandler";
+import {LoggerService} from "./services/loggerService";
 
 @NgModule({
   declarations: [
@@ -40,11 +42,17 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
       HomePageEffects
     ]),
     MatProgressBarModule,
+    MatSnackBarModule,
   ],
   providers: [
+    LoggerService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
     DiagnosticsService,
     HomePageService,
-    AdventureScriptEditorService
+    AdventureScriptEditorService,
   ],
   bootstrap: [AppComponent]
 })
