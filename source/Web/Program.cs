@@ -1,3 +1,4 @@
+using Application.Playground;
 using Application.ScriptEditor;
 using Db;
 using DotNetCore.AspNetCore;
@@ -19,6 +20,7 @@ builder.Services.AddSpaStaticFiles("Frontend");
 builder.Services.AddContext<AdventureContext>(options => options.UseSqlServer(builder.Services.GetConnectionString(nameof(AdventureContext))));
 
 // Application services
+builder.Services.AddScoped<IAdventurePlaygroundService, AdventurePlaygroundService>();
 builder.Services.AddScoped<IScriptEditorService, ScriptEditorService>();
 //
 
