@@ -21,6 +21,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {GlobalErrorHandler} from "./services/infrastructure/globalErrorHandler";
 import {LoggerService} from "./services/loggerService";
+import {NotificationService} from "./services/infrastructure/notificationService";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import {LoggerService} from "./services/loggerService";
     MatSnackBarModule,
   ],
   providers: [
-    LoggerService,
+    NotificationService,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
