@@ -1,4 +1,5 @@
 import {ErrorHandler, NgModule} from '@angular/core';
+import {FlexLayoutModule} from "@angular/flex-layout";
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -21,6 +22,8 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {GlobalErrorHandler} from "./services/infrastructure/globalErrorHandler";
 import {NotificationService} from "./services/infrastructure/notificationService";
+import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import {NotificationService} from "./services/infrastructure/notificationService
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
+    FlexLayoutModule,
     MonacoEditorModule,
     HomePageModule,
     AdventureScriptEditorPageModule,
@@ -43,6 +47,8 @@ import {NotificationService} from "./services/infrastructure/notificationService
     ]),
     MatProgressBarModule,
     MatSnackBarModule,
+    MatListModule,
+    MatToolbarModule
   ],
   providers: [
     NotificationService,

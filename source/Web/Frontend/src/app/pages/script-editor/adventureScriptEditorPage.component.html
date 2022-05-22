@@ -1,3 +1,16 @@
-Adventure Script Editor Page
-<button mat-button></button>
-<ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Edit adventure script
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="script-editor">
+    <ngx-monaco-editor
+      fxFlex [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" [disabled]="!code">Save</button>
+  </mat-card-actions>
+</mat-card>
+
+

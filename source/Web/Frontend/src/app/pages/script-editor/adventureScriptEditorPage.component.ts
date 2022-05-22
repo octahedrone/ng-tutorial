@@ -8,7 +8,10 @@ import {State} from "../../state/app.state";
   templateUrl: './adventureScriptEditorPage.component.html'
 })
 export class AdventureScriptEditorPageComponent implements OnInit {
-  editorOptions = {theme: 'vs-dark', language: 'yaml'};
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'yaml'
+  };
   code: string = '';
 
   constructor(private store: Store<State>,
