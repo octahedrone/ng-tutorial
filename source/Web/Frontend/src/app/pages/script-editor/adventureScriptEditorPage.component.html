@@ -9,7 +9,7 @@
       fxFlex [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
   </mat-card-content>
   <mat-card-actions align="end">
-    <button mat-raised-button color="primary" [disabled]="!code">Save</button>
+    <button mat-raised-button color="primary" (click)="saveCurrentScript()" [disabled]="!code">Save</button>
   </mat-card-actions>
 </mat-card>
 

@@ -29,13 +29,18 @@ public class ScriptEditorController : ControllerBase
     }
 
     [HttpPost("")]
-    public void Save(string yaml)
+    public void Save(UpdateScriptRequest request)
     {
-        var rootStep = YamlConverter.Deserialize(yaml);
+        var rootStep = YamlConverter.Deserialize(request.Script);
         _service.ReplaceCurrentScript(new ScriptEditorScript
         {
             Created = DateTime.UtcNow,
             Root = rootStep
         });
+    }
+    
+    public class UpdateScriptRequest
+    {
+        public string Script { get; set; }
     }
 }

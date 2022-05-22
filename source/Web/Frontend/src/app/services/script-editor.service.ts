@@ -1,4 +1,4 @@
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 
@@ -9,5 +9,6 @@ export class AdventureScriptEditorService {
 
   loadScript = (): Observable<string> => this.http.get<string>("script/edit");
 
-  saveScript = (script: string): Observable<any> => this.http.post("script/edit", script);
+  saveScript = (script: string): Observable<any> =>
+    this.http.post("script/edit", {script: script});
 }

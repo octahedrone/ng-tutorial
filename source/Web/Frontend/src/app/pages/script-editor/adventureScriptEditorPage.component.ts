@@ -1,3 +1,5 @@
+// https://materiahq.github.io/ngx-monaco-editor/api-reference/
+
 import {Component, OnInit} from '@angular/core';
 import {AdventureScriptEditorService} from "../../services/script-editor.service";
 import {Store} from "@ngrx/store";
