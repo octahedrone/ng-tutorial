@@ -16,7 +16,7 @@ export class NotificationService {
   }
 
   error(message: string) {
-    this.snackBar.open('Your message here', 'Dismiss', {
+    this.snackBar.open(message, 'Dismiss', {
       duration: 2000,
       panelClass:['error-snackbar']
     });

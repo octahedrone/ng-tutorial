@@ -4,6 +4,7 @@ import {Component, OnInit} from '@angular/core';
 import {AdventureScriptEditorService} from "../../services/script-editor.service";
 import {Store} from "@ngrx/store";
 import {State} from "../../state/app.state";
+import {NotificationService} from "../../services/infrastructure/notificationService";
 
 @Component({
   selector: 'adventure-log-viewer',
@@ -17,7 +18,8 @@ export class AdventureScriptEditorPageComponent implements OnInit {
   code: string = '';
 
   constructor(private store: Store<State>,
-              private service: AdventureScriptEditorService) {
+              private service: AdventureScriptEditorService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -26,7 +28,8 @@ export class AdventureScriptEditorPageComponent implements OnInit {
   }
 
   saveCurrentScript() {
-    this.service.saveScript(this.code)
-      .subscribe();
+    this.service
+      .saveScript(this.code)
+      .subscribe(success => this.notificationService.success('Script saved successfully'));
   }
 }
