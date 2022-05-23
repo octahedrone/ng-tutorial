@@ -24,7 +24,7 @@ export class AdventureScriptEditorPageComponent implements OnInit {
 
   ngOnInit() {
     this.service.loadScript()
-      .subscribe(x => this.code = x);
+      .subscribe(x => this.code = x.script);
   }
 
   saveCurrentScript() {

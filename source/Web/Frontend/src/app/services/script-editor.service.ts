@@ -7,8 +7,12 @@ export class AdventureScriptEditorService {
   constructor(private readonly http: HttpClient) {
   }
 
-  loadScript = (): Observable<string> => this.http.get<string>("script/edit");
+  loadScript = (): Observable<GetScriptResponse> => this.http.get<GetScriptResponse>("script/edit");
 
   saveScript = (script: string): Observable<any> =>
     this.http.post("script/edit", {script: script});
+}
+
+export interface GetScriptResponse {
+  script: string;
 }

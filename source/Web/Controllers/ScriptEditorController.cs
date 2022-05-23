@@ -17,15 +17,19 @@ public class ScriptEditorController : ControllerBase
     }
 
     [HttpGet("")]
-    public string GetCurrentScriptYaml()
+    public GetScriptResponse GetCurrentScriptYaml()
     {
         var script = _service.GetCurrentScript();
         if (script?.Root == null)
         {
-            return String.Empty;
+            return new GetScriptResponse();
         }
 
-        return YamlConverter.Serialize(script.Root);
+        var yaml = YamlConverter.Serialize(script.Root);
+        return new GetScriptResponse
+        {
+            Script = yaml
+        };
     }
 
     [HttpPost("")]
@@ -38,7 +42,12 @@ public class ScriptEditorController : ControllerBase
             Root = rootStep
         });
     }
-    
+
+    public class GetScriptResponse
+    {
+        public string Script { get; set; }
+    }
+
     public class UpdateScriptRequest
     {
         public string Script { get; set; }
