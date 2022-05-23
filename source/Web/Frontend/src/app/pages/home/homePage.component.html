@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-nav-list *ngIf="state$ | async as state">
+  <mat-nav-list *ngIf="state">
     <a mat-list-item *ngIf="!state.scenarioIsPresent" routerLink="create">
       Let's create a script for an adventure!
     </a>

@@ -2,8 +2,6 @@
 
 import {Component, OnInit} from '@angular/core';
 import {AdventureScriptEditorService} from "../../services/script-editor.service";
-import {Store} from "@ngrx/store";
-import {State} from "../../state/app.state";
 import {NotificationService} from "../../services/infrastructure/notificationService";
 
 @Component({
@@ -17,8 +15,7 @@ export class AdventureScriptEditorPageComponent implements OnInit {
   };
   code: string = '';
 
-  constructor(private store: Store<State>,
-              private service: AdventureScriptEditorService,
+  constructor(private service: AdventureScriptEditorService,
               private notificationService: NotificationService) {
   }
 

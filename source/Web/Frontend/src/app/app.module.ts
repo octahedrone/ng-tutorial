@@ -8,11 +8,6 @@ import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {ROUTES} from "./app.routes";
 import {HomePageService} from "./services/homePage.service";
-import {StoreModule} from '@ngrx/store';
-import {EffectsModule} from '@ngrx/effects';
-import {State} from "./state/app.state";
-import {homePageReducer} from "./pages/home/state/homePage.reducer";
-import {HomePageEffects} from "./pages/home/state/homePage.effects";
 import {MonacoEditorModule} from "@materia-ui/ngx-monaco-editor";
 import {FormsModule} from "@angular/forms";
 import {AdventureScriptEditorPageModule} from "./pages/script-editor/adventureScriptEditorPage.module";
@@ -39,12 +34,6 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     HomePageModule,
     AdventureScriptEditorPageModule,
     RouterModule.forRoot(ROUTES),
-    StoreModule.forRoot<State>({
-      home: homePageReducer
-    }),
-    EffectsModule.forRoot([
-      HomePageEffects
-    ]),
     MatProgressBarModule,
     MatSnackBarModule,
     MatListModule,

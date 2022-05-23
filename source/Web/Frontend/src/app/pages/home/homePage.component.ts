@@ -1,23 +1,28 @@
 import {Component, OnInit} from '@angular/core';
-import {Store} from "@ngrx/store";
-import * as homePageActions from "./state/homePage.actions";
-import {getHomePageState, HomePageState} from "./state/homePage.reducer";
-import {Observable} from "rxjs";
-import {State} from "../../state/app.state";
+import {AdventureState, HomePageService} from "../../services/homePage.service";
 
 @Component({
   selector: 'home-page',
   templateUrl: './homePage.component.html'
 })
 export class HomePageComponent implements OnInit {
-  public state$: Observable<HomePageState>;
+  public state: HomePageState | null = null;
 
-  constructor(private store: Store<State>) {
-    this.state$ = this.store.select(getHomePageState);
+  constructor(private service: HomePageService) {
   }
 
   ngOnInit() {
-    this.store.dispatch(homePageActions.initializeAction());
+    this.service.loadState().subscribe(x =>
+      this.state = {
+        scenarioIsPresent: x.scenarioIsPresent,
+        adventureLogIsPresent: x.adventureState === AdventureState.Finished || x.adventureState === AdventureState.Pending,
+        activeAdventureIsPresent: x.adventureState === AdventureState.Pending
+      })
   }
 }
 
+export interface HomePageState {
+  scenarioIsPresent: boolean;
+  activeAdventureIsPresent: boolean;
+  adventureLogIsPresent: boolean;
+}

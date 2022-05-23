@@ -1,3 +1,4 @@
+using Application.Playground;
 using Application.ScriptEditor;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,37 +8,37 @@ namespace Web.Controllers;
 [Route("home")]
 public sealed class HomePageController : ControllerBase
 {
-    private IScriptEditorService _scriptEditorService;
+    private readonly IScriptEditorService _scriptEditorService;
+    private readonly IAdventurePlaygroundService _adventurePlaygroundService;
 
-    public HomePageController(IScriptEditorService scriptEditorService)
+    public HomePageController(IScriptEditorService scriptEditorService, IAdventurePlaygroundService adventurePlaygroundService)
     {
         _scriptEditorService = scriptEditorService;
+        _adventurePlaygroundService = adventurePlaygroundService;
     }
 
     [HttpGet("")]
     public HomeScreenData GetInitialData()
     {
         var hasCurrentScript = _scriptEditorService.HasCurrentScript();
+        var adventureState = _adventurePlaygroundService.GetAdventureState();
         
         return new HomeScreenData
         (
             scenarioIsPresent: hasCurrentScript,
-            activeAdventureIsPresent: false,
-            adventureLogIsPresent: false
+            adventureState: adventureState
         );
     }
 }
 
 public class HomeScreenData
 {
-    public HomeScreenData(bool scenarioIsPresent, bool activeAdventureIsPresent, bool adventureLogIsPresent)
+    public HomeScreenData(bool scenarioIsPresent, AdventureState adventureState)
     {
         ScenarioIsPresent = scenarioIsPresent;
-        ActiveAdventureIsPresent = activeAdventureIsPresent;
-        AdventureLogIsPresent = adventureLogIsPresent;
+        AdventureState = adventureState;
     }
 
     public bool ScenarioIsPresent { get; }
-    public bool ActiveAdventureIsPresent { get; }
-    public bool AdventureLogIsPresent { get; }
+    public AdventureState AdventureState { get; }
 }
