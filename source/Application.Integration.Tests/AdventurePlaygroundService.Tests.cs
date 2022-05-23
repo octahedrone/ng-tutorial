@@ -38,18 +38,90 @@ public class AdventurePlaygroundService_Tests : IDisposable
     }
 
     [Fact]
-    public void HasCurrentAdventureReturnsFalseIfThereIsNoActiveAdventure()
+    public void GetAdventureStateReturnsImpossibleIfThereAreNoScriptSteps()
     {
-        _sut.HasCurrentAdventure().Should().BeFalse();
-    }
+        _sut.GetAdventureState().Should().Be(AdventureState.Impossible);
 
-    [Fact]
-    public void HasCurrentAdventureReturnsTrueIfThereIsActiveAdventure()
-    {
         _dataContext.Adventures.Add(new Adventure());
         _dataContext.SaveChanges();
 
-        _sut.HasCurrentAdventure().Should().BeTrue();
+        _sut.GetAdventureState().Should().Be(AdventureState.Impossible);
+    }
+
+    [Fact]
+    public void GetAdventureStateReturnsNotStartedIfThereAreNoStepLogs()
+    {
+        _dataContext.AdventureScripts.Add(CreateScriptWithRootStep());
+        _dataContext.SaveChanges();
+
+        _sut.GetAdventureState().Should().Be(AdventureState.NotStarted);
+    }
+
+    [Fact]
+    public void GetAdventureStateReturnsFinishedIfThereAreAllStepLogs()
+    {
+        var script = CreateScriptWithRootStep();
+        _dataContext.AdventureScripts.Add(script);
+        _dataContext.SaveChanges();
+        
+        _dataContext.Adventures.Add(new Adventure
+        {
+            AdventureScriptId = script.Id,
+            Started = DateTime.UtcNow,
+            Logs = new List<AdventureLog>
+            {
+                new()
+                {
+                    AdventureScriptStepId = _dataContext.AdventureScriptSteps.Single().Id
+                }
+            }
+        });
+        _dataContext.SaveChanges();
+
+        _sut.GetAdventureState().Should().Be(AdventureState.Finished);
+    }
+    
+    [Fact]
+    public void GetAdventureStateReturnsPendingIfNoAllStepsHaveLogs()
+    {
+        var rootStep = new AdventureScriptStep()
+        {
+            Text = "Root step",
+            Options = new List<AdventureScriptStep>
+            {
+                new ()
+                {
+                    OptionText = "YesNoWhatever",
+                    Text = "You guess"
+                }
+            }
+        };
+        var script = new AdventureScript
+        {
+            Created = DateTime.UtcNow,
+            AdventureScriptSteps = new List<AdventureScriptStep>
+            {
+                rootStep
+            }
+        };
+        _dataContext.AdventureScripts.Add(script);
+        _dataContext.SaveChanges();
+        
+        _dataContext.Adventures.Add(new Adventure
+        {
+            AdventureScriptId = script.Id,
+            Started = DateTime.UtcNow,
+            Logs = new List<AdventureLog>
+            {
+                new()
+                {
+                    AdventureScriptStepId = rootStep.Id
+                }
+            }
+        });
+        _dataContext.SaveChanges();
+
+        _sut.GetAdventureState().Should().Be(AdventureState.Pending);
     }
 
     [Fact]
@@ -63,17 +135,7 @@ public class AdventurePlaygroundService_Tests : IDisposable
     [Fact]
     public void DeleteCurrentAdventureWorks()
     {
-        _dataContext.AdventureScripts.Add(new AdventureScript
-        {
-            Created = DateTime.UtcNow,
-            AdventureScriptSteps = new List<AdventureScriptStep>
-            {
-                new()
-                {
-                    Text = "Root step"
-                }
-            }
-        });
+        _dataContext.AdventureScripts.Add(CreateScriptWithRootStep());
         _dataContext.SaveChanges();
 
         _dataContext.Adventures.Add(new Adventure
@@ -88,12 +150,27 @@ public class AdventurePlaygroundService_Tests : IDisposable
                 }
             }
         });
-        
+
         _dataContext.SaveChanges();
 
         _sut.DeleteCurrentAdventure();
-        
+
         _dataContext.AdventureLogs.Any().Should().BeFalse();
         _dataContext.Adventures.Any().Should().BeFalse();
+    }
+    
+    private static AdventureScript CreateScriptWithRootStep()
+    {
+        return new AdventureScript
+        {
+            Created = DateTime.UtcNow,
+            AdventureScriptSteps = new List<AdventureScriptStep>
+            {
+                new()
+                {
+                    Text = "Root step"
+                }
+            }
+        };
     }
 }

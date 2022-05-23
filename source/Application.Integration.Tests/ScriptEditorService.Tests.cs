@@ -105,6 +105,7 @@ public class ScriptEditorService_Tests : IDisposable
         _dataContext.SaveChanges();
 
         var script = _sut.GetCurrentScript();
+        script.Root.Should().NotBeNull();
         script.Root.Text.Should().Be(root.Text);
         script.Root.Options.Should().NotBeNull();
         script.Root.Options.Count.Should().Be(2);

@@ -2,6 +2,7 @@
 
 public interface IAdventurePlaygroundService
 {
-    bool HasCurrentAdventure();
+    AdventureState GetAdventureState();
+
     void DeleteCurrentAdventure();
 }
