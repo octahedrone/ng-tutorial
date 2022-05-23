@@ -39,6 +39,16 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
         }
     }
 
+    public AdventureStep GetCurrentStep()
+    {
+        throw new NotImplementedException();
+    }
+
+    public AdventureStep Advance(int selectedOptionIndex)
+    {
+        throw new NotImplementedException();
+    }
+
     public void DeleteCurrentAdventure()
     {
         var currentAdventure = _dataContext.Adventures.SingleOrDefault();
