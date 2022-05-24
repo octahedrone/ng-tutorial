@@ -4,7 +4,7 @@ namespace Application.Playground;
 
 public static class Converters
 {
-    public static CurrentAdventureState ToAdventureStepWithOptions(this AdventureScriptStep entityWithOptionsIncluded, AdventureState state)
+    public static CurrentAdventureState ToAdventureStepWithOptions(this AdventureScriptStep entityWithOptionsIncluded)
     {
         if (entityWithOptionsIncluded == null)
             return null;
@@ -22,7 +22,6 @@ public static class Converters
 
         return new CurrentAdventureState
         {
-            AdventureState = state,
             CurrentStepId = entityWithOptionsIncluded.Id,
             CurrentStepText = entityWithOptionsIncluded.Text,
             CurrentStepOptions = options,

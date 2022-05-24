@@ -11,10 +11,10 @@ export class HomePageService {
 }
 
 export enum AdventureState {
-  Impossible,
-  NotStarted,
-  Pending,
-  Finished
+  Impossible = 'Impossible',
+  NotStarted = 'NotStarted',
+  Pending = 'Pending',
+  Finished = 'Finished'
 }
 
 export interface HomeScreenData {

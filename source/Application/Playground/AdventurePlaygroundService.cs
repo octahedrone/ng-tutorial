@@ -40,17 +40,17 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
                 throw new AdventurePlaygroundServiceException($"Script does not contain any steps");
             }
 
-            return rootStep.ToAdventureStepWithOptions(AdventureState.NotStarted);
+            return rootStep.ToAdventureStepWithOptions();
         }
 
         var step = _dataContext.AdventureScriptSteps
             .Include(x => x.Options)
             .Single(x => x.Id == adventure.CurrentScriptStepId);
 
-        return step.ToAdventureStepWithOptions((AdventureState)adventure.AdventureStateId);
+        return step.ToAdventureStepWithOptions();
     }
 
-    public CurrentAdventureState Advance(int stepId, int? selectedOptionId)
+    public CurrentAdventureState Commit(int stepId, int? selectedOptionId)
     {
         if (selectedOptionId != null)
         {
@@ -90,7 +90,7 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
                     throw new AdventurePlaygroundServiceException($"{stepId} is not the current adventure step, which is {adventure.CurrentScriptStepId}");
                 }
 
-                adventure.CurrentScriptStepId = stepId;
+                adventure.CurrentScriptStepId = selectedOptionId.Value;
                 _dataContext.AdventureLogs.Add(new AdventureLog
                 {
                     AdventureId = adventure.Id,
@@ -99,7 +99,7 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
             }
 
             _dataContext.SaveChanges();
-            return nextStep.ToAdventureStepWithOptions((AdventureState)adventure.AdventureStateId);
+            return nextStep.ToAdventureStepWithOptions();
         }
         else
         {
@@ -130,13 +130,17 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
 
                 _dataContext.Adventures.Add(adventure);
             }
-            else
+            else if(adventure.AdventureStateId != (int)AdventureState.Finished)
             {
                 // taking last adventure step
                 adventure.AdventureStateId = (int)AdventureState.Finished;
+                adventure.Logs.Add(new AdventureLog
+                {
+                    AdventureScriptStepId = stepId
+                });
             }
             _dataContext.SaveChanges();
-            return currentStep.ToAdventureStepWithOptions((AdventureState)adventure.AdventureStateId);
+            return currentStep.ToAdventureStepWithOptions();
         }
     }
 

@@ -43,7 +43,7 @@ public sealed class AdventurePlaygroundController : ControllerBase
     {
         try
         {
-            var step = _adventurePlaygroundService.Advance(request.StepId, request.OptionId);
+            var step = _adventurePlaygroundService.Commit(request.StepId, request.OptionId);
             return new QueryResponse<CurrentAdventureState>
             {
                 Result = step

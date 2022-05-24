@@ -20,7 +20,6 @@ export class AdventurePlaygroundService {
 }
 
 export interface CurrentAdventureState {
-  adventureState: AdventureState;
   currentStepId: number;
   currentStepText: string;
   currentStepOptions: AdventureStepOption[]

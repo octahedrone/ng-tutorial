@@ -4,6 +4,8 @@ import {
   CurrentAdventureState,
   AdventureStepOption
 } from "../../services/adventure-playground.service";
+import {Router} from "@angular/router";
+import {QueryResponse} from "../../services/service.models";
 
 @Component({
   selector: 'adventure-log-viewer',
@@ -11,28 +13,33 @@ import {
 })
 export class AdventurePlaygroundPageComponent {
   public state: CurrentAdventureState | null = null;
+  public isLastStep: boolean = false;
   public selectedOptions: AdventureStepOption[] = [];
 
-  constructor(private service: AdventurePlaygroundService) {
+  constructor(private service: AdventurePlaygroundService,
+              private router: Router) {
     this.service.getCurrentStep()
-      .subscribe(x => {
-        if (x.success) {
-          this.state = {...x.result};
-        }
-      });
+      .subscribe(x => this.processResponse(x));
   }
 
   submitCurrentSelection() {
-    if (!this.state || !this.selectedOptions || !this.selectedOptions.length) {
+    if (!this.state) {
       return;
     }
     const stepId = this.state.currentStepId;
-    const optionId = this.selectedOptions[0].id;
+    const optionId = this.isLastStep ? null : this.selectedOptions[0].id;
     this.service.submitUserChoice(stepId, optionId)
-      .subscribe(x => {
-        if (x.success) {
-          this.state = {...x.result};
-        }
-      });
+      .subscribe(x => this.processResponse(x));
+  }
+
+  private processResponse(x: QueryResponse<CurrentAdventureState>): void {
+    if (x.success) {
+      if (this.isLastStep) {
+        this.router.navigate(['']);
+      } else {
+        this.state = {...x.result};
+        this.isLastStep = !this.state.currentStepOptions || this.state.currentStepOptions.length === 0
+      }
+    }
   }
 }

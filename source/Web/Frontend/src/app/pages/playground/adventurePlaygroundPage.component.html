@@ -1,20 +1,37 @@
 <mat-card *ngIf="state" class="adventure-card">
-  <mat-card-header>
-    <mat-card-title>{{state.currentStepText}}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content *ngIf="state.currentStepOptions && state.currentStepOptions.length">
-    <mat-selection-list [multiple]="false" [(ngModel)]="selectedOptions">
-      <mat-list-option *ngFor="let option of state.currentStepOptions" [value]="option">
-        {{option.text}}
-      </mat-list-option>
-    </mat-selection-list>
-  </mat-card-content>
-  <mat-card-actions align="end">
-    <button *ngIf="state.currentStepOptions && state.currentStepOptions.length"
-            [disabled]="selectedOptions.length !==1"
-            (click)="submitCurrentSelection()"
-            mat-raised-button color="primary">
-      Submit answer
-    </button>
-  </mat-card-actions>
+  <!--  Any, but last adventure step template-->
+  <ng-container *ngIf="!isLastStep">
+    <mat-card-header>
+      <mat-card-title>{{state.currentStepText}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-selection-list [multiple]="false" [(ngModel)]="selectedOptions">
+        <mat-list-option *ngFor="let option of state.currentStepOptions" [value]="option">
+          {{option.text}}
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button [disabled]="selectedOptions.length !==1"
+              (click)="submitCurrentSelection()"
+              mat-raised-button color="primary">
+        Submit answer
+      </button>
+    </mat-card-actions>
+  </ng-container>
+  <!--  Last adventure step template-->
+  <ng-container *ngIf="isLastStep">
+    <mat-card-header>
+      <mat-card-title>Here it ends...</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      {{state.currentStepText}}
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button (click)="submitCurrentSelection()"
+              mat-raised-button color="primary">
+        Finish
+      </button>
+    </mat-card-actions>
+  </ng-container>
 </mat-card>

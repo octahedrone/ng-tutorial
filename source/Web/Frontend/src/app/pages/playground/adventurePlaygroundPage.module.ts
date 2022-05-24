@@ -5,6 +5,8 @@ import {MatListModule} from "@angular/material/list";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
+import {RouterModule} from "@angular/router";
+import {FlexModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [AdventurePlaygroundPageComponent],
@@ -13,7 +15,9 @@ import {MatButtonModule} from "@angular/material/button";
     CommonModule,
     MatListModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule,
+    FlexModule
   ],
   exports: [AdventurePlaygroundPageComponent]
 })
