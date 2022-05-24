@@ -1,4 +1,5 @@
 using Db;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Playground;
 
@@ -13,35 +14,35 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
 
     public AdventureState GetAdventureState()
     {
-        var query = (from step in _dataContext.AdventureScriptSteps
-                     from log in _dataContext.AdventureLogs.Where(x => x.AdventureScriptStepId == step.Id).DefaultIfEmpty()
-                     select new
-                     {
-                         StepId = step.Id,
-                         LogExists = log != null
-                     })
-            .GroupBy(x => x.LogExists)
-            .Select(g => g.Key)
-            .ToList();
-
-        switch (query.Count)
+        var adventure = _dataContext.Adventures.SingleOrDefault();
+        if (adventure != null)
         {
-            case 0:
-                // AdventureScriptSteps is empty so there are no records at all
-                return AdventureState.Impossible;
-            case 2:
-                // there are AdventureScriptSteps and AdventureLogs records
-                return AdventureState.Pending;
-            default:
-                return query[0]
-                    ? AdventureState.Finished // every AdventureScriptSteps has AdventureLogs
-                    : AdventureState.NotStarted; // any AdventureScriptSteps has AdventureLogs
+            return (AdventureState)adventure.AdventureStateId;
         }
+
+        return _dataContext.AdventureScriptSteps.Any()
+            ? AdventureState.NotStarted
+            : AdventureState.Impossible;
     }
 
     public AdventureStep GetCurrentStep()
     {
-        throw new NotImplementedException();
+        var adventure = _dataContext.Adventures.SingleOrDefault();
+        if (adventure == null)
+        {
+            // take a root step
+            var rootStep = _dataContext.AdventureScriptSteps
+                .Include(x => x.Options)
+                .SingleOrDefault(x => x.ParentStepId == null);
+
+            return rootStep.ToAdventureStepWithOptions();
+        }
+
+        var step = _dataContext.AdventureScriptSteps
+            .Include(x => x.Options)
+            .SingleOrDefault(x => x.Id == adventure.CurrentScriptStepId);
+
+        return step.ToAdventureStepWithOptions();
     }
 
     public AdventureStep Advance(int selectedOptionIndex)

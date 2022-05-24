@@ -1,7 +1,13 @@
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .success-snackbar {
   background: #3c9c22;
@@ -18,4 +24,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .script-editor {
   width: 800px;
   height: 600px;
+}
+
+.adventure-card {
+  min-width: 400px;
+  min-height: 200px;
 }

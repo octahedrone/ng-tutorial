@@ -54,6 +54,12 @@ public class AdventureContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.AdventureStateId)
             .OnDelete(DeleteBehavior.NoAction);
+        
+        modelBuilder.Entity<Adventure>()
+            .HasOne<AdventureScriptStep>()
+            .WithMany()
+            .HasForeignKey(x => x.CurrentScriptStepId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<AdventureLog>()
             .HasOne(x => x.Adventure)

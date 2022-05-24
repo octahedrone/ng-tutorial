@@ -1,1 +1,19 @@
-Adventure Playground Page
+<mat-card *ngIf="state" class="adventure-card">
+  <mat-card-header>
+    <mat-card-title>{{state.text}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content *ngIf="state.options && state.options.length">
+    <mat-selection-list [multiple]="false" [(ngModel)]="selectedOptions">
+      <mat-list-option *ngFor="let option of state.options" [value]="option">
+        {{option.text}}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button [disabled]="selectedOptions.length !==1"
+            (click)="submitCurrentSelection()"
+            mat-raised-button color="primary">
+      Submit answer
+    </button>
+  </mat-card-actions>
+</mat-card>

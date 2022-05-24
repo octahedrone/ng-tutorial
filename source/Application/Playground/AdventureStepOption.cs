@@ -1,8 +1,7 @@
 ﻿namespace Application.Playground;
 
-public class AdventureStep
+public class AdventureStepOption
 {
     public int Id { get; set; }
     public string Text { get; set; }
-    public List<AdventureStepOption> Options { get; set; }
 }

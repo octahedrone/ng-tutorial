@@ -19,6 +19,8 @@ import {GlobalErrorHandler} from "./services/infrastructure/globalErrorHandler";
 import {NotificationService} from "./services/infrastructure/notificationService";
 import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {AdventurePlaygroundService} from "./services/adventure-playground.service";
+import {AdventurePlaygroundPageModule} from "./pages/playground/adventurePlaygroundPage.module";
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     MonacoEditorModule,
     HomePageModule,
     AdventureScriptEditorPageModule,
+    AdventurePlaygroundPageModule,
     RouterModule.forRoot(ROUTES),
     MatProgressBarModule,
     MatSnackBarModule,
@@ -48,6 +51,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     DiagnosticsService,
     HomePageService,
     AdventureScriptEditorService,
+    AdventurePlaygroundService,
   ],
   bootstrap: [AppComponent]
 })

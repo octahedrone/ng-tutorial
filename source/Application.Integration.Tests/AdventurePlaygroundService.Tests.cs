@@ -58,29 +58,42 @@ public class AdventurePlaygroundService_Tests : IDisposable
     }
 
     [Fact]
-    public void GetAdventureStateReturnsFinishedIfThereAreAllStepLogs()
+    public void GetAdventureStateReturnsAdventureStateValue()
     {
         var script = CreateScriptWithRootStep();
         _dataContext.AdventureScripts.Add(script);
         _dataContext.SaveChanges();
         
-        _dataContext.Adventures.Add(new Adventure
+        _sut.GetAdventureState().Should().Be(AdventureState.NotStarted);
+
+        var adventure = new Adventure
         {
             AdventureScriptId = script.Id,
             Started = DateTime.UtcNow,
-            Logs = new List<AdventureLog>
-            {
-                new()
-                {
-                    AdventureScriptStepId = _dataContext.AdventureScriptSteps.Single().Id
-                }
-            }
-        });
+            AdventureStateId = (int)AdventureState.Pending
+        };
+        _dataContext.Adventures.Add(adventure);
         _dataContext.SaveChanges();
 
+        _sut.GetAdventureState().Should().Be(AdventureState.Pending);
+        
+        adventure.AdventureStateId = (int)AdventureState.Finished;
+        _dataContext.SaveChanges();
+        
         _sut.GetAdventureState().Should().Be(AdventureState.Finished);
     }
-    
+
+    [Fact]
+    public void GetCurrentStepReturnFistScriptStepIfThereIsNoActiveAdventure()
+    {
+        var script = CreateScriptWithRootStep();
+        _dataContext.AdventureScripts.Add(script);
+        _dataContext.SaveChanges();
+
+        var step = _sut.GetCurrentStep();
+        step.Text.Should().Be(script.AdventureScriptSteps.Single().Text);
+    }
+
     [Fact]
     public void GetAdventureStateReturnsPendingIfNoAllStepsHaveLogs()
     {

@@ -22,6 +22,7 @@ builder.Services.AddContext<AdventureContext>(options => options.UseSqlServer(bu
 // Application services
 builder.Services.AddScoped<IAdventurePlaygroundService, AdventurePlaygroundService>();
 builder.Services.AddScoped<IScriptEditorService, ScriptEditorService>();
+builder.Services.AddScoped<IAdventurePlaygroundService, AdventurePlaygroundService>();
 //
 
 var application = builder.Build();
