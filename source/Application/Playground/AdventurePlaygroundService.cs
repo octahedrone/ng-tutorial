@@ -25,7 +25,7 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
             : AdventureState.Impossible;
     }
 
-    public AdventureStep GetCurrentStep()
+    public CurrentAdventureState GetCurrentStep()
     {
         var adventure = _dataContext.Adventures.SingleOrDefault();
         if (adventure == null)
@@ -34,20 +34,110 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
             var rootStep = _dataContext.AdventureScriptSteps
                 .Include(x => x.Options)
                 .SingleOrDefault(x => x.ParentStepId == null);
+            
+            if (rootStep == null)
+            {
+                throw new AdventurePlaygroundServiceException($"Script does not contain any steps");
+            }
 
-            return rootStep.ToAdventureStepWithOptions();
+            return rootStep.ToAdventureStepWithOptions(AdventureState.NotStarted);
         }
 
         var step = _dataContext.AdventureScriptSteps
             .Include(x => x.Options)
-            .SingleOrDefault(x => x.Id == adventure.CurrentScriptStepId);
+            .Single(x => x.Id == adventure.CurrentScriptStepId);
 
-        return step.ToAdventureStepWithOptions();
+        return step.ToAdventureStepWithOptions((AdventureState)adventure.AdventureStateId);
     }
 
-    public AdventureStep Advance(int selectedOptionIndex)
+    public CurrentAdventureState Advance(int stepId, int? selectedOptionId)
     {
-        throw new NotImplementedException();
+        if (selectedOptionId != null)
+        {
+            var nextStep = _dataContext.AdventureScriptSteps
+                .Include(x => x.Options)
+                .SingleOrDefault(x => x.Id == selectedOptionId && x.ParentStepId == stepId);
+
+            if (nextStep == null)
+            {
+                throw new AdventurePlaygroundServiceException($"Script does not contain step with id {selectedOptionId} and parent {stepId}");
+            }
+
+            var adventure = _dataContext.Adventures.SingleOrDefault();
+            if (adventure == null)
+            {
+                // user takes first step for at least two step adventure
+                adventure = new Adventure
+                {
+                    Started = DateTime.UtcNow,
+                    AdventureScriptId = nextStep.AdventureScriptId,
+                    AdventureStateId = (int)AdventureState.Pending,
+                    CurrentScriptStepId = selectedOptionId.Value,
+                    Logs = new List<AdventureLog>
+                    {
+                        new() { AdventureScriptStepId = stepId },
+                        new() { AdventureScriptStepId = selectedOptionId.Value },
+                    }
+                };
+
+                _dataContext.Adventures.Add(adventure);
+            }
+            else
+            {
+                // adventure is in progress and user takes another step
+                if (adventure.CurrentScriptStepId != stepId)
+                {
+                    throw new AdventurePlaygroundServiceException($"{stepId} is not the current adventure step, which is {adventure.CurrentScriptStepId}");
+                }
+
+                adventure.CurrentScriptStepId = stepId;
+                _dataContext.AdventureLogs.Add(new AdventureLog
+                {
+                    AdventureId = adventure.Id,
+                    AdventureScriptStepId = selectedOptionId.Value
+                });
+            }
+
+            _dataContext.SaveChanges();
+            return nextStep.ToAdventureStepWithOptions((AdventureState)adventure.AdventureStateId);
+        }
+        else
+        {
+            var currentStep = _dataContext.AdventureScriptSteps
+                .Where(x => !_dataContext.AdventureScriptSteps.Any(c => c.ParentStepId == stepId))
+                .SingleOrDefault(x => x.Id == stepId);
+
+            if (currentStep == null)
+            {
+                throw new AdventurePlaygroundServiceException($"Script step {stepId} is not  present or needs child option to be selected to proceed");
+            }
+
+            var adventure = _dataContext.Adventures.SingleOrDefault();
+            if (adventure == null)
+            {
+                // user takes first step for a single step adventure
+                adventure = new Adventure
+                {
+                    Started = DateTime.UtcNow,
+                    AdventureScriptId = currentStep.AdventureScriptId,
+                    AdventureStateId = (int)AdventureState.Finished,
+                    CurrentScriptStepId = stepId,
+                    Logs = new List<AdventureLog>
+                    {
+                        new() { AdventureScriptStepId = stepId },
+                    }
+                };
+
+                _dataContext.Adventures.Add(adventure);
+            }
+            else
+            {
+                // taking last adventure step
+                adventure.AdventureStateId = (int)AdventureState.Finished;
+            }
+            _dataContext.SaveChanges();
+            return currentStep.ToAdventureStepWithOptions((AdventureState)adventure.AdventureStateId);
+        }
     }
 
     public void DeleteCurrentAdventure()

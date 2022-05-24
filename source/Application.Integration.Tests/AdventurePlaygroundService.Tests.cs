@@ -91,7 +91,7 @@ public class AdventurePlaygroundService_Tests : IDisposable
         _dataContext.SaveChanges();
 
         var step = _sut.GetCurrentStep();
-        step.Text.Should().Be(script.AdventureScriptSteps.Single().Text);
+        step.CurrentStepText.Should().Be(script.AdventureScriptSteps.Single().Text);
     }
 
     [Fact]

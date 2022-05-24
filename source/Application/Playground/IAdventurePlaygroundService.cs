@@ -3,7 +3,7 @@
 public interface IAdventurePlaygroundService
 {
     AdventureState GetAdventureState();
-    AdventureStep GetCurrentStep();
-    AdventureStep Advance(int selectedOptionIndex);
+    CurrentAdventureState GetCurrentStep();
+    CurrentAdventureState Advance(int stepId, int? selectedOptionId);
     void DeleteCurrentAdventure();
 }

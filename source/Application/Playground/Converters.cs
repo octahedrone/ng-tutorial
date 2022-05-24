@@ -4,7 +4,7 @@ namespace Application.Playground;
 
 public static class Converters
 {
-    public static AdventureStep ToAdventureStepWithOptions(this AdventureScriptStep entityWithOptionsIncluded)
+    public static CurrentAdventureState ToAdventureStepWithOptions(this AdventureScriptStep entityWithOptionsIncluded, AdventureState state)
     {
         if (entityWithOptionsIncluded == null)
             return null;
@@ -15,16 +15,17 @@ public static class Converters
                 .Select(x => new AdventureStepOption
                 {
                     Id = x.Id,
-                    Text = x.OptionText
+                    Text = x.OptionText,
                 })
                 .ToList()
             : null;
 
-        return new AdventureStep
+        return new CurrentAdventureState
         {
-            Id = entityWithOptionsIncluded.Id,
-            Text = entityWithOptionsIncluded.Text,
-            Options = options
+            AdventureState = state,
+            CurrentStepId = entityWithOptionsIncluded.Id,
+            CurrentStepText = entityWithOptionsIncluded.Text,
+            CurrentStepOptions = options,
         };
     }
 }

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {
   AdventurePlaygroundService,
-  AdventureStep,
+  CurrentAdventureState,
   AdventureStepOption
 } from "../../services/adventure-playground.service";
 
@@ -10,7 +10,7 @@ import {
   templateUrl: './adventurePlaygroundPage.component.html'
 })
 export class AdventurePlaygroundPageComponent {
-  public state: AdventureStep | null = null;
+  public state: CurrentAdventureState | null = null;
   public selectedOptions: AdventureStepOption[] = [];
 
   constructor(private service: AdventurePlaygroundService) {
@@ -23,6 +23,16 @@ export class AdventurePlaygroundPageComponent {
   }
 
   submitCurrentSelection() {
-    console.log(this.selectedOptions);
+    if (!this.state || !this.selectedOptions || !this.selectedOptions.length) {
+      return;
+    }
+    const stepId = this.state.currentStepId;
+    const optionId = this.selectedOptions[0].id;
+    this.service.submitUserChoice(stepId, optionId)
+      .subscribe(x => {
+        if (x.success) {
+          this.state = {...x.result};
+        }
+      });
   }
 }

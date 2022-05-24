@@ -1,8 +1,9 @@
 ﻿namespace Application.Playground;
 
-public class AdventureStep
+public class CurrentAdventureState
 {
-    public int Id { get; set; }
-    public string Text { get; set; }
-    public List<AdventureStepOption> Options { get; set; }
+    public AdventureState AdventureState { get; set; }
+    public int CurrentStepId { get; set; }
+    public string CurrentStepText { get; set; }
+    public List<AdventureStepOption> CurrentStepOptions { get; set; }
 }
