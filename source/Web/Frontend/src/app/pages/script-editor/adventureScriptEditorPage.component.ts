@@ -29,4 +29,9 @@ export class AdventureScriptEditorPageComponent implements OnInit {
       .saveScript(this.code)
       .subscribe(success => this.notificationService.success('Script saved successfully'));
   }
+
+  loadSample() {
+    this.service.loadSample()
+      .subscribe(x => this.code = x.script);
+  }
 }

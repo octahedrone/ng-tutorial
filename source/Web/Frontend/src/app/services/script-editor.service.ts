@@ -11,6 +11,8 @@ export class AdventureScriptEditorService {
 
   saveScript = (script: string): Observable<any> =>
     this.http.post("script/edit", {script: script});
+
+  loadSample = (): Observable<GetScriptResponse> => this.http.get<GetScriptResponse>("script/sample");
 }
 
 export interface GetScriptResponse {

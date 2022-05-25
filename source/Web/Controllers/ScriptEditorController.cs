@@ -6,7 +6,7 @@ using YamlFormatter;
 namespace Web.Controllers;
 
 [ApiController]
-[Route("script/edit")]
+[Route("script")]
 public class ScriptEditorController : ControllerBase
 {
     private readonly IScriptEditorService _service;
@@ -16,7 +16,7 @@ public class ScriptEditorController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("")]
+    [HttpGet("edit")]
     public GetScriptResponse GetCurrentScriptYaml()
     {
         var script = _service.GetCurrentScript();
@@ -31,8 +31,19 @@ public class ScriptEditorController : ControllerBase
             Script = yaml
         };
     }
+    
+    [HttpGet("sample")]
+    public GetScriptResponse GetSampleScriptYaml()
+    {
+        var script = _service.GetSampleScript();
+        var yaml = YamlConverter.Serialize(script.Root);
+        return new GetScriptResponse
+        {
+            Script = yaml
+        };
+    }
 
-    [HttpPost("")]
+    [HttpPost("edit")]
     public void Save(UpdateScriptRequest request)
     {
         var rootStep = YamlConverter.Deserialize(request.Script);
