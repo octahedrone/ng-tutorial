@@ -8,6 +8,8 @@ export class HomePageService {
   }
 
   loadState = (): Observable<HomeScreenData> => this.http.get<HomeScreenData>("home");
+
+  startAdventure = (): Observable<Object> => this.http.post('adventure/start', {});
 }
 
 export enum AdventureState {

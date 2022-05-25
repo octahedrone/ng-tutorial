@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AdventureState, HomePageService} from "../../services/homePage.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'home-page',
@@ -8,7 +9,8 @@ import {AdventureState, HomePageService} from "../../services/homePage.service";
 export class HomePageComponent implements OnInit {
   public state: HomePageState | null = null;
 
-  constructor(private service: HomePageService) {
+  constructor(private service: HomePageService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -18,6 +20,12 @@ export class HomePageComponent implements OnInit {
         adventureLogIsPresent: x.adventureState === AdventureState.Finished || x.adventureState === AdventureState.Pending,
         activeAdventureIsPresent: x.adventureState === AdventureState.Pending
       })
+  }
+
+  startAdventure() {
+    this.service.startAdventure().subscribe( _=>{
+      this.router.navigate(['play']);
+    })
   }
 }
 

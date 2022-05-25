@@ -16,6 +16,13 @@ public sealed class AdventurePlaygroundController : ControllerBase
         _adventurePlaygroundService = adventurePlaygroundService;
         _logger = logger;
     }
+    
+    [HttpPost("start")]
+    public IActionResult StartNewAdventure()
+    {
+        _adventurePlaygroundService.DeleteCurrentAdventure();
+        return Ok();
+    }
 
     [HttpGet("current-step")]
     public QueryResponse<CurrentAdventureState> GetCurrentStep()

@@ -1,23 +1,23 @@
 <mat-card>
-  <mat-nav-list *ngIf="state">
-    <a mat-list-item *ngIf="!state.scenarioIsPresent" routerLink="create">
+  <mat-action-list *ngIf="state">
+    <button mat-list-item *ngIf="!state.scenarioIsPresent" routerLink="create">
       Let's create a script for an adventure!
-    </a>
-    <a mat-list-item *ngIf="state.scenarioIsPresent" routerLink="edit">
+    </button>
+    <button mat-list-item *ngIf="state.scenarioIsPresent" routerLink="edit">
       You can edit current adventure script
-    </a>
-    <a mat-list-item *ngIf="state.scenarioIsPresent && !state.activeAdventureIsPresent" routerLink="start">
+    </button>
+    <button mat-list-item *ngIf="state.scenarioIsPresent && !state.activeAdventureIsPresent" (click)="startAdventure()">
       Let's start a new adventure!
-    </a>
-    <a mat-list-item *ngIf="state.activeAdventureIsPresent" routerLink="play">
+    </button>
+    <button mat-list-item *ngIf="state.activeAdventureIsPresent" routerLink="play">
       Continue your adventure...
-    </a>
-    <a mat-list-item *ngIf="state.activeAdventureIsPresent && state.adventureLogIsPresent" routerLink="log">
+    </button>
+    <button mat-list-item *ngIf="state.activeAdventureIsPresent && state.adventureLogIsPresent" routerLink="log">
       Look at your current adventure progress so far...
-    </a>
-    <a mat-list-item *ngIf="!state.activeAdventureIsPresent && state.adventureLogIsPresent" routerLink="log">
+    </button>
+    <button mat-list-item *ngIf="!state.activeAdventureIsPresent && state.adventureLogIsPresent" routerLink="log">
       Remember your last adventure!
-    </a>
-  </mat-nav-list>
+    </button>
+  </mat-action-list>
 </mat-card>
 

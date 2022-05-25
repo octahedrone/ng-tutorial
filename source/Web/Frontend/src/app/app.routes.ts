@@ -8,7 +8,6 @@ export const ROUTES: Routes = [
   {path: "", component: HomePageComponent},
   {path: "create", component: AdventureScriptEditorPageComponent},
   {path: "edit", component: AdventureScriptEditorPageComponent},
-  {path: "start", component: AdventurePlaygroundPageComponent},
   {path: "play", component: AdventurePlaygroundPageComponent},
   {path: "log", component: AdventureLogViewerPageComponent},
   {

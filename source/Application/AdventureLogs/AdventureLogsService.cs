@@ -35,7 +35,12 @@ public class AdventureLogsService : IAdventureLogsService
 
         while (step.Options.Any())
         {
-            var selectedOption = step.Options.Single(x => selectedOptionIds.Contains(x.Id));
+            var selectedOption = step.Options.SingleOrDefault(x => selectedOptionIds.Contains(x.Id));
+            if (selectedOption == null)
+            {
+                // adventure is not complete, some options are not yet selected
+                break;
+            }
             result.Add(new AdventureLogRecord
             {
                 CardText = step.Text,
