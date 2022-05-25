@@ -17,7 +17,6 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   log(error: any): Observable<boolean> {
-    debugger;
     return this.http
       .post('diagnostics/error', {
           message: error.message,

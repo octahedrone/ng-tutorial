@@ -1,1 +1,16 @@
-Adventure Log Viewer Page
+<mat-card *ngFor="let record of state" class="log-card">
+  <mat-card-content>
+    <div fxLayout="row">
+      <div fxFlex="50%" fxLayoutAlign="center center">
+        {{record.cardText}}
+      </div>
+      <mat-list *ngIf="record.options && record.options.length > 0" fxFlex="50%">
+        <mat-list-item *ngFor="let option of record.options;let optionIndex=index;" selected>
+          <mat-icon mat-list-icon *ngIf="optionIndex === record.selectedOptionIndex">done</mat-icon>
+          <mat-icon mat-list-icon *ngIf="optionIndex !== record.selectedOptionIndex"></mat-icon>
+          {{option}}
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>

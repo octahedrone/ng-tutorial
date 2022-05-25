@@ -18,7 +18,7 @@ body {
 }
 
 .main-container {
-  height: 100vh;
+  height: 80vh;
 }
 
 .script-editor {
@@ -31,3 +31,7 @@ body {
   min-height: 200px;
 }
 
+.log-card {
+  min-width: 400px;
+  min-height: 200px;
+}

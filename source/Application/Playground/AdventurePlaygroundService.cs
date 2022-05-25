@@ -134,10 +134,6 @@ public class AdventurePlaygroundService : IAdventurePlaygroundService
             {
                 // taking last adventure step
                 adventure.AdventureStateId = (int)AdventureState.Finished;
-                adventure.Logs.Add(new AdventureLog
-                {
-                    AdventureScriptStepId = stepId
-                });
             }
             _dataContext.SaveChanges();
             return currentStep.ToAdventureStepWithOptions();

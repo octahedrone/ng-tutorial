@@ -1,3 +1,4 @@
+using Application.AdventureLogs;
 using Application.Playground;
 using Application.ScriptEditor;
 using Db;
@@ -23,6 +24,7 @@ builder.Services.AddContext<AdventureContext>(options => options.UseSqlServer(bu
 builder.Services.AddScoped<IAdventurePlaygroundService, AdventurePlaygroundService>();
 builder.Services.AddScoped<IScriptEditorService, ScriptEditorService>();
 builder.Services.AddScoped<IAdventurePlaygroundService, AdventurePlaygroundService>();
+builder.Services.AddScoped<IAdventureLogsService, AdventureLogsService>();
 //
 
 var application = builder.Build();

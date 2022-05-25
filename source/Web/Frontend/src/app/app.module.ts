@@ -21,6 +21,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {AdventurePlaygroundService} from "./services/adventure-playground.service";
 import {AdventurePlaygroundPageModule} from "./pages/playground/adventurePlaygroundPage.module";
+import {AdventureLogViewerPageModule} from "./pages/adventure-log-viewer/adventureLogViewerPage.module";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -36,11 +38,13 @@ import {AdventurePlaygroundPageModule} from "./pages/playground/adventurePlaygro
     HomePageModule,
     AdventureScriptEditorPageModule,
     AdventurePlaygroundPageModule,
+    AdventureLogViewerPageModule,
     RouterModule.forRoot(ROUTES),
     MatProgressBarModule,
     MatSnackBarModule,
     MatListModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatIconModule
   ],
   providers: [
     NotificationService,
